@@ -1223,9 +1223,9 @@ public class MailUtils {
 			UnsupportedMimeTypeException, ExtensionException, AccessDeniedException, IOException, AutomationException, FileSizeExceededException {
 		for (AttachmentChunks att : msg.getAttachmentFiles()) {
 			if (!att.isEmbeddedMessage()) {
-				String attFileName = att.attachFileName.toString();
-				if (att.attachLongFileName != null) {
-					attFileName = att.attachLongFileName.toString();
+			    String attFileName = "";				
+				if (att.getAttachFileName() != null) {
+					attFileName = att.getAttachFileName().toString();
 				}
 
 				log.debug("Importing attachment: {}", attFileName);
@@ -1243,10 +1243,10 @@ public class MailUtils {
 				String mimeType = MimeTypeConfig.mimeTypes.getContentType(testName.toLowerCase());
 				attachment.setMimeType(mimeType);
 				attachment.setPath(mail.getPath() + "/" + testName);
-				ByteArrayInputStream bais = new ByteArrayInputStream(att.attachData.getValue());
+				ByteArrayInputStream bais = new ByteArrayInputStream(att.getAttachData().getValue());
 
 				if (Config.REPOSITORY_NATIVE) {
-					new DbDocumentModule().create(token, attachment, bais, att.attachData.getValue().length, userId);
+					new DbDocumentModule().create(token, attachment, bais, att.getAttachData().getValue().length, userId);
 				} else {
 					// Other implementation
 				}
